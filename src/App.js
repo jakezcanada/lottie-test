@@ -1,25 +1,42 @@
-import logo from './logo.svg';
+import { useEffect, useState, useRef } from 'react';
 import './App.css';
+import {RemoveScroll} from 'react-remove-scroll';
+import lottie from 'lottie-web';
+import * as idleAnim from './Idle.json';
+import * as grabAnim from './Grab.json';
 
-function App() {
+export default function App() {
+
+  const [isGrabbing, setIsGrabbing] = useState(false);
+  const lottieRef = useRef(null);
+
+  useEffect(() => {
+    lottie.destroy();
+    const anim = lottie.loadAnimation({
+      container: lottieRef.current,
+      loop: isGrabbing ? false : true,
+      autoplay: true,
+      animationData: isGrabbing ? grabAnim : idleAnim,
+    });
+    anim.onComplete = function () {
+      anim.pause();
+      setIsGrabbing(false);
+    };
+    console.log('i fire once');
+  }, [isGrabbing]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <RemoveScroll>
+    <div className='container'>
+      <div id="claw" ref={lottieRef}></div>
+      <button onClick={() => {
+        if(!isGrabbing){
+          lottie.destroy();
+          setIsGrabbing(true);
+        }
+      }}>perhaps</button>
     </div>
+    </RemoveScroll>
   );
 }
 
-export default App;
