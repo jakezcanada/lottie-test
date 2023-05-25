@@ -8,6 +8,7 @@ import * as grabAnim from './Grab.json';
 export default function App() {
 
   const [isGrabbing, setIsGrabbing] = useState(false);
+  const [pageContent, setPageContent] = useState();
   const lottieRef = useRef(null);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export default function App() {
     <RemoveScroll>
     <div className='container'>
       <div id="claw" ref={lottieRef}></div>
+      {!isGrabbing ? <div>hi</div>:''}
       <button onClick={() => {
         if(!isGrabbing){
           lottie.destroy();
